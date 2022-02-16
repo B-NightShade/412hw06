@@ -4,12 +4,17 @@ import java.io.InputStreamReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.TreeMap;
+import java.io.FileWriter;
+import java.io.BufferedWriter;
 import java.util.Map;
 
 public class Main {
     public static void main(String[] args) {
         TreeMap <String, Integer> treeMap = new TreeMap<>();
         String[] words;
+        int totalWords = 0;
+        int highCount = 0;
+        String highO = "";
         System.out.print("fileName: ");
         InputStreamReader inputStreamReader = new InputStreamReader(System.in);
         BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
@@ -29,31 +34,42 @@ public class Main {
                     }
                     int count = treeMap.get(w);
                     count += 1;
+                    totalWords += 1;
                     treeMap.put(w,count);
                 }
             }
-            /*
-            for(Map.Entry<String, Integer> entry : treeMap.entrySet()){
-                String key = entry.getKey();
-                int value = entry.getValue();
-                System.out.println(String.format("%s: %d", key, value));
-            }
-            */
+
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-        /*
+
         System.out.print("output fileName: ");
         InputStreamReader inputStreamReader2 = new InputStreamReader(System.in);
         BufferedReader bufferedReader2 = new BufferedReader(inputStreamReader2);
         try {
             String inputLine2 = bufferedReader2.readLine();
-            //System.out.println("you entered: " + inputLine2);
+            File file2 = new File(inputLine2);
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file2));
+            for(Map.Entry<String, Integer> entry : treeMap.entrySet()) {
+                String key = entry.getKey();
+                int value = entry.getValue();
+                bufferedWriter.write(String.format("%s: %d \n", key, value));
+            }
+            bufferedWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-         */
-
+        String msg = String.format("read %d words", totalWords);
+        System.out.println(msg);
+        for(Map.Entry<String, Integer> entry : treeMap.entrySet()) {
+            int value = entry.getValue();
+            if (value > highCount){
+                highCount = value;
+                highO = entry.getKey();
+            }
+        }
+        String msg2 = String.format("\"%s\" occurred %d times", highO, highCount);
+        System.out.println(msg2);
     }
 }
